@@ -81,6 +81,17 @@ defmodule Mailchimp.List do
     categories
   end
 
+  def create_interest_category(%__MODULE__{id: id}, attrs \\ %{}) do
+    {:ok, response} = HTTPClient.post("/lists/#{id}/interest-categories", Poison.encode!(attrs))
+    case response do
+      %Response{status_code: 200, body: body} ->
+        {:ok, InterestCategory.new(body)}
+
+      %Response{status_code: _, body: body} ->
+        {:error, body}
+    end
+  end
+
   def create_member(%__MODULE__{links: %{"members" => %Link{href: href}}}, email_address, status, merge_fields \\ %{}, additional_data \\ %{})
   when is_binary(email_address) and is_map(merge_fields) and status in [:subscribed, :pending, :unsubscribed, :cleaned] do
     {:ok, response} = HTTPClient.get(href)

@@ -32,4 +32,5 @@ defmodule Mailchimp.List.InterestCategory do
     {:ok, interests} = interests(category)
     interests
   end
+
 end
