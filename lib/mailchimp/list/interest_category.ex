@@ -33,4 +33,19 @@ defmodule Mailchimp.List.InterestCategory do
     interests
   end
 
+  def create_interest(%__MODULE__{id: id, list_id: list_id}, attrs \\ %{}) do
+    create_interest(id, list_id, attrs)
+  end
+  def create_interest(id, list_id, attrs ) do
+    {:ok, response} = HTTPClient.post("/lists/#{list_id}/interest-categories/#{id}/interests", Poison.encode!(attrs))
+    case response do
+      %Response{status_code: 200, body: body} ->
+        {:ok, Interest.new(body)}
+
+      %Response{status_code: _, body: body} ->
+        {:error, body}
+    end
+  end
+
+
 end
