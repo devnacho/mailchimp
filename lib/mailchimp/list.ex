@@ -126,6 +126,21 @@ defmodule Mailchimp.List do
     end
   end
 
+  def create_or_update_member(%__MODULE__{id: id}, email_address, status, merge_fields \\ %{}, additional_data \\ %{})
+  when is_binary(email_address) and is_map(merge_fields) and status in [:subscribed, :pending, :unsubscribed, :cleaned] do
+    data = Map.merge(additional_data, %{email_address: email_address, status: status, status_if_new: status, merge_fields: merge_fields})
+
+    {:ok, response} = HTTPClient.put "/lists/#{id}/members/#{ md5(email_address) }", Poison.encode!(data)
+    case response do
+      %Response{status_code: 200, body: body} ->
+        {:ok, Member.new(body)}
+
+        %Response{status_code: _, body: body} ->
+        {:error, body}
+    end
+
+  end
+
   def create_member!(list, email_address, status, merge_fields \\ %{}, additional_data \\ %{}) do
     {:ok, member} = create_member(list, email_address, status, merge_fields, additional_data)
     member
