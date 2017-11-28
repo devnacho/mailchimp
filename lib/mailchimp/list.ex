@@ -29,6 +29,17 @@ defmodule Mailchimp.List do
     }
   end
 
+  def get(id) do
+    {:ok, response} = HTTPClient.get("/lists/#{id}")
+    case response do
+      %Response{status_code: 200, body: body} ->
+        {:ok, __MODULE__.new(body)}
+
+      %Response{status_code: _, body: body} ->
+        {:error, body}
+    end
+  end
+
   def members(%__MODULE__{links: %{"members" => %Link{href: href}}}) do
     {:ok, response} = HTTPClient.get(href)
     case response do
