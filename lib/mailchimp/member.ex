@@ -3,7 +3,7 @@ defmodule Mailchimp.Member do
   alias HTTPoison.Response
   alias Mailchimp.HTTPClient
 
-  defstruct email_address: nil, email_client: nil, email_type: nil, id: nil, ip_opt: nil, ip_signup: nil, language: nil, last_changed: nil, list_id: nil, location: nil, member_rating: nil, merge_fields: nil, stats: nil, status: nil, status_if_new: nil, timestamp_opt: nil, timestamp_signup: nil, unique_email_id: nil, vip: nil, links: nil
+  defstruct email_address: nil, email_client: nil, email_type: nil, id: nil, ip_opt: nil, ip_signup: nil, language: nil, last_changed: nil, list_id: nil, location: nil, member_rating: nil, merge_fields: nil, stats: nil, status: nil, status_if_new: nil, timestamp_opt: nil, timestamp_signup: nil, unique_email_id: nil, vip: nil, links: nil, interests: nil
 
   def new(attributes) do
     %__MODULE__{
@@ -19,6 +19,7 @@ defmodule Mailchimp.Member do
       location: attributes[:location],
       member_rating: attributes[:member_rating],
       merge_fields: attributes[:merge_fields],
+      interests: attributes[:interests],
       stats: attributes[:stats],
       status: String.to_atom(attributes[:status]),
       status_if_new: attributes[:status_if_new],
